@@ -5,6 +5,7 @@ import bloodPressureRouter from './routes/bloodpressure-router.js';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import entryRouter from './routes/entry-router.js';
+import healthRouter from './routes/health-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
 
 const hostname = '127.0.0.1';
@@ -25,6 +26,8 @@ app.use('/api/users', userRouter);
 app.use('/api/entries', entryRouter);
 // vaihdettu lennossa verenpaineeksi (Dummy items resource) 
 app.use('/api/bloodpressure', bloodPressureRouter);
+
+app.use('/api/health', healthRouter);
 
 // API root
 app.get('/api', (req, res) => {
