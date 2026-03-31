@@ -6,6 +6,7 @@ import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import entryRouter from './routes/entry-router.js';
 import healthRouter from './routes/health-router.js';
+import infoRouter from './routes/info-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
 
 const hostname = '127.0.0.1';
@@ -28,6 +29,8 @@ app.use('/api/entries', entryRouter);
 app.use('/api/bloodpressure', bloodPressureRouter);
 
 app.use('/api/health', healthRouter);
+
+app.use('/api/info', infoRouter);
 
 // API root
 app.get('/api', (req, res) => {
