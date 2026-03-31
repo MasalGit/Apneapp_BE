@@ -49,9 +49,7 @@ BloodPressure
 
 ## Kuvakaappaukset
 
-Katso sovelluksen käyttöliittymä frontend-reposta:
-https://github.com/Hege3000/frontend-vite/tree/week8-palautus
----
+
 
 ## Tekninen arkkitehtuuri
 
