@@ -23,6 +23,8 @@ const addUser = async (user) => {
   }
 };
 
+const selectUserById = findUserById;
+
 // GET /api/users/:id - hae käyttäjä ID:n perusteella - minä ja Claude
 const findUserById = async (userId) => {
   const sql = 'SELECT user_id, username, email, created_at, user_level FROM Users WHERE user_id = ?';
@@ -43,6 +45,7 @@ const updateUser = async (userId, user) => {
   }
 };
 
+
 // DELETE /api/users/:id - poista käyttäjä ID:n mukaan
 const removeUser = async (userId) => {
   const sql = 'DELETE FROM Users WHERE user_id = ?';
@@ -55,6 +58,18 @@ const removeUser = async (userId) => {
   }
 };
 
+const selectUserByEmail = async (email) => {
+  try {
+    const sql = 'SELECT * FROM Users WHERE email = ?';
+    const [rows] = await promisePool.execute(sql, [email]);
+    // Jos riviä ei löydy, palautetaan error-objekti opettajan koodia varten
+    if (rows.length === 0) return { error: 'User not found' };
+    return rows[0];
+  } catch (e) {
+    console.error('error', e.message);
+    return { error: e.message };
+  }
+};
 
 // lisätty virheenkäsittely minä ja Claude
 const findUserByUsername = async (username) => {
@@ -71,4 +86,4 @@ const findUserByUsername = async (username) => {
 
 
 
-export {findUserByUsername, addUser, listAllUsers, findUserById, updateUser, removeUser };
+export {findUserByUsername, addUser, listAllUsers, findUserById, selectUserById, selectUserByEmail, updateUser, removeUser };

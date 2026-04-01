@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import bloodPressureRouter from './routes/bloodpressure-router.js';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import entryRouter from './routes/entry-router.js';
+import kubiosRouter from './routes/kubios-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
 
 const hostname = '127.0.0.1';
@@ -23,12 +23,13 @@ app.use(requestLogger);
 app.use('/api/users', userRouter);
 // Diary entries resource router 
 app.use('/api/entries', entryRouter);
-// vaihdettu lennossa verenpaineeksi (Dummy items resource) 
-app.use('/api/bloodpressure', bloodPressureRouter);
+
+// Kubios Cloud API integration and apnea analysis
+app.use('/api/kubios', kubiosRouter);
 
 // API root
 app.get('/api', (req, res) => {
-  res.send('Hegen terveyspäiväkirjasovelluksenAPI täällä ja päällä. Terve!');
+  res.send('ApneApp');
 });
 
 
