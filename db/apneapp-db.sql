@@ -20,6 +20,7 @@ CREATE TABLE HrvResults (
   sns_index    FLOAT,
   stress_index FLOAT,
   readiness    FLOAT,
+  lf_hf_ratio  FLOAT,
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
