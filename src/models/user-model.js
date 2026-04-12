@@ -23,7 +23,7 @@ const addUser = async (user) => {
   }
 };
 
-const selectUserById = findUserById;
+
 
 // GET /api/users/:id - hae käyttäjä ID:n perusteella - minä ja Claude
 const findUserById = async (userId) => {
@@ -84,6 +84,6 @@ const findUserByUsername = async (username) => {
 };
 
 
-
+const selectUserById = findUserById;
 
 export {findUserByUsername, addUser, listAllUsers, findUserById, selectUserById, selectUserByEmail, updateUser, removeUser };
