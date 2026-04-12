@@ -3,15 +3,15 @@ import promisePool from '../utils/database.js';
 const addHrvResult = async (result) => {
   const {
     user_id, measured_at, mean_rr_ms, rmssd_ms,
-    sdnn_ms, pns_index, sns_index, stress_index, readiness
+    sdnn_ms, pns_index, sns_index, stress_index, readiness, lf_hf_ratio
   } = result;
   const sql = `INSERT INTO HrvResults
     (user_id, measured_at, mean_rr_ms, rmssd_ms, sdnn_ms,
-     pns_index, sns_index, stress_index, readiness)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+     pns_index, sns_index, stress_index, readiness, lf_hf_ratio)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const params = [
     user_id, measured_at, mean_rr_ms, rmssd_ms,
-    sdnn_ms, pns_index, sns_index, stress_index, readiness
+    sdnn_ms, pns_index, sns_index, stress_index, readiness, lf_hf_ratio
   ];
   try {
     const result = await promisePool.execute(sql, params);
