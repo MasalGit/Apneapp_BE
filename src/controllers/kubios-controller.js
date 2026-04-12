@@ -14,29 +14,28 @@ const calculateApneaRisk = (hrvResults) => {
     return vals.reduce((a, b) => a + b, 0) / vals.length;
   };
 
-  const sns = avg('sns_index');
-  const pns = avg('pns_index');
-  const lfhfEstimate = sns && pns && pns !== 0 ? sns / Math.abs(pns) : null;
+  // Käytetään suoraa LF/HF-suhdetta Kubiosin freq_domain-datasta
+  // Kynnysarvot perustuvat Hakala 2017:
+  // normaali yöuni LF/HF ≈ 0.34, hypopnea LF/HF ≈ 1.55
+  const lfhf = avg('lf_hf_ratio');
 
-  let risk, label, explanation;
-
-  if (lfhfEstimate === null) {
-    const snsVal = sns ?? 0;
-    if (snsVal > 1.5)      {risk = 'high';     label = 'Korkea';}
-    else if (snsVal > 0.5) {risk = 'elevated'; label = 'Kohonnut';}
-    else                   {risk = 'low';      label = 'Matala';}
-    explanation = 'Arvio perustuu sympaattisen hermoston aktiivisuuteen.';
-  } else {
-    // Kynnysarvot perustuvat Hakala 2017 tutkimukseen:
-    // normaali uni LF/HF ≈ 0.34, hypopnea LF/HF ≈ 1.55
-    if (lfhfEstimate > 1.2)      {risk = 'high';     label = 'Korkea';}
-    else if (lfhfEstimate > 0.6) {risk = 'elevated'; label = 'Kohonnut';}
-    else                         {risk = 'low';      label = 'Matala';}
-    explanation = `LF/HF-estimaatti: ${lfhfEstimate.toFixed(2)}. ` +
-      'Viitearvot: normaali uni ~0.34, uniapnea ~1.55 (Hakala 2017).';
+  if (lfhf === null) {
+    return {risk: 'unknown', label: 'Ei dataa', explanation: 'LF/HF-data puuttuu.'};
   }
 
-  return {risk, label, explanation, lfhfEstimate};
+  let risk, label;
+
+  if (lfhf > 1.2)      {risk = 'high';     label = 'Korkea';}
+  else if (lfhf > 0.6) {risk = 'elevated'; label = 'Kohonnut';}
+  else                 {risk = 'low';      label = 'Matala';}
+
+  return {
+    risk,
+    label,
+    lfhf_avg: lfhf.toFixed(2),
+    explanation: `LF/HF-keskiarvo: ${lfhf.toFixed(2)}. ` +
+      'Viitearvot (Hakala 2017): normaali yöuni ~0.34, hypopnea ~1.55.'
+  };
 };
 
 const getUserData = async (req, res, next) => {
@@ -61,7 +60,6 @@ const getUserData = async (req, res, next) => {
     const data = await response.json();
     const results = data.results || [];
 
-    // Tallennetaan jokainen tulos omaan DB:hen
     for (const r of results) {
       await addHrvResult({
         user_id:      userId,
@@ -73,11 +71,13 @@ const getUserData = async (req, res, next) => {
         sns_index:    r.result?.sns_index,
         stress_index: r.result?.stress_index,
         readiness:    r.result?.readiness,
+        lf_hf_ratio:  r.result?.freq_domain?.LF_HF_power,  // suora arvo Kubiosista
       });
     }
 
-    // Lasketaan riskiarvio tallennetuista tuloksista
-    const risk = calculateApneaRisk(results.map(r => r.result));
+    const risk = calculateApneaRisk(results.map(r => ({
+      lf_hf_ratio: r.result?.freq_domain?.LF_HF_power
+    })));
 
     return res.json({
       message: 'Data haettu ja tallennettu',
