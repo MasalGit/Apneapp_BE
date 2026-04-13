@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import {addHrvResult, listHrvResultsByUserId, findHrvResultByMeasuredAt} from '../models/hrv-model.js';
+import {addHrvResult, listHrvResultsByUserId} from '../models/hrv-model.js';
 
 const baseUrl = process.env.KUBIOS_API_URI;
 
@@ -63,14 +63,7 @@ const getUserData = async (req, res, next) => {
       const measured_at = new Date(r.measured_timestamp)
         .toISOString().slice(0, 19).replace('T', ' ');
 
-      // Tarkista onko jo tallennettu
-      const existing = await findHrvResultByMeasuredAt(userId, measured_at);
-      if (existing) {
-        skippedCount++;
-        continue;
-      }
-
-      await addHrvResult({
+      const insertResult = await addHrvResult({
         user_id:      userId,
         measured_at,
         mean_rr_ms:   r.result?.mean_rr_ms,
@@ -81,8 +74,14 @@ const getUserData = async (req, res, next) => {
         stress_index: r.result?.stress_index,
         readiness:    r.result?.readiness,
         lf_hf_ratio:  r.result?.freq_domain?.LF_HF_power,
+        result_id:    r.result_id,
       });
-      savedCount++;
+
+      if (insertResult?.hrv_id && insertResult.hrv_id > 0) {
+        savedCount++;
+      } else {
+        skippedCount++;
+      }
     }
 
     const risk = calculateApneaRisk(results.map(r => ({
@@ -127,4 +126,30 @@ const getUserInfo = async (req, res, next) => {
   }
 };
 
-export {getUserData, getAnalysisHistory, getUserInfo};
+const getMeasures = async (req, res, next) => {
+  const {kubiosIdToken} = req.user;
+
+  const to = req.query.to || new Date().toISOString();
+  const from = req.query.from ||
+    new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(); // oletuksena 1 vuosi
+
+  const headers = new Headers();
+  headers.append('User-Agent', process.env.KUBIOS_USER_AGENT);
+  headers.append('Authorization', kubiosIdToken);
+  headers.append('x-api-key', process.env.KUBIOS_API_KEY);
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/measure/self/session?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
+      {method: 'GET', headers}
+    );
+    if (!response.ok) throw new Error(`Kubios API error: ${response.status}`);
+
+    const data = await response.json();
+    return res.json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {getUserData, getAnalysisHistory, getUserInfo, getMeasures};
