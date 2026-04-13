@@ -5,7 +5,7 @@ const addHrvResult = async (result) => {
     user_id, measured_at, mean_rr_ms, rmssd_ms,
     sdnn_ms, pns_index, sns_index, stress_index, readiness, lf_hf_ratio
   } = result;
-  const sql = `INSERT INTO HrvResults
+  const sql = `INSERT IGNORE INTO HrvResults
     (user_id, measured_at, mean_rr_ms, rmssd_ms, sdnn_ms,
      pns_index, sns_index, stress_index, readiness, lf_hf_ratio)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -21,6 +21,7 @@ const addHrvResult = async (result) => {
     return {error: e.message};
   }
 };
+
 
 const listHrvResultsByUserId = async (user_id) => {
   try {
@@ -44,4 +45,15 @@ const findHrvResultById = async (hrv_id, user_id) => {
   }
 };
 
-export {addHrvResult, listHrvResultsByUserId, findHrvResultById};
+const findHrvResultByMeasuredAt = async (user_id, measured_at) => {
+  try {
+    const sql = 'SELECT hrv_id FROM HrvResults WHERE user_id = ? AND measured_at = ?';
+    const [rows] = await promisePool.execute(sql, [user_id, measured_at]);
+    return rows[0];
+  } catch (e) {
+    console.error('error', e.message);
+    return null;
+  }
+};
+
+export {addHrvResult, listHrvResultsByUserId, findHrvResultById, findHrvResultByMeasuredAt};
