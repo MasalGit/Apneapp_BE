@@ -14,9 +14,6 @@ const calculateApneaRisk = (hrvResults) => {
     return vals.reduce((a, b) => a + b, 0) / vals.length;
   };
 
-  // Käytetään suoraa LF/HF-suhdetta Kubiosin freq_domain-datasta
-  // Kynnysarvot perustuvat Hakala 2017:
-  // normaali yöuni LF/HF ≈ 0.34, hypopnea LF/HF ≈ 1.55
   const lfhf = avg('lf_hf_ratio');
 
   if (lfhf === null) {
@@ -24,7 +21,6 @@ const calculateApneaRisk = (hrvResults) => {
   }
 
   let risk, label;
-
   if (lfhf > 1.2)      {risk = 'high';     label = 'Korkea';}
   else if (lfhf > 0.6) {risk = 'elevated'; label = 'Kohonnut';}
   else                 {risk = 'low';      label = 'Matala';}
@@ -60,10 +56,16 @@ const getUserData = async (req, res, next) => {
     const data = await response.json();
     const results = data.results || [];
 
+    let savedCount = 0;
+    let skippedCount = 0;
+
     for (const r of results) {
-      await addHrvResult({
+      const measured_at = new Date(r.measured_timestamp)
+        .toISOString().slice(0, 19).replace('T', ' ');
+
+      const insertResult = await addHrvResult({
         user_id:      userId,
-        measured_at:  new Date(r.measured_timestamp).toISOString().slice(0, 19).replace('T', ' '),
+        measured_at,
         mean_rr_ms:   r.result?.mean_rr_ms,
         rmssd_ms:     r.result?.rmssd_ms,
         sdnn_ms:      r.result?.sdnn_ms,
@@ -71,8 +73,15 @@ const getUserData = async (req, res, next) => {
         sns_index:    r.result?.sns_index,
         stress_index: r.result?.stress_index,
         readiness:    r.result?.readiness,
-        lf_hf_ratio:  r.result?.freq_domain?.LF_HF_power,  // suora arvo Kubiosista
+        lf_hf_ratio:  r.result?.freq_domain?.LF_HF_power,
+        result_id:    r.result_id,
       });
+
+      if (insertResult?.hrv_id && insertResult.hrv_id > 0) {
+        savedCount++;
+      } else {
+        skippedCount++;
+      }
     }
 
     const risk = calculateApneaRisk(results.map(r => ({
@@ -80,8 +89,10 @@ const getUserData = async (req, res, next) => {
     })));
 
     return res.json({
-      message: 'Data haettu ja tallennettu',
+      message: 'Data haettu',
       count: results.length,
+      saved: savedCount,
+      skipped: skippedCount,
       risk,
       results,
     });
@@ -115,4 +126,30 @@ const getUserInfo = async (req, res, next) => {
   }
 };
 
-export {getUserData, getAnalysisHistory, getUserInfo};
+const getMeasures = async (req, res, next) => {
+  const {kubiosIdToken} = req.user;
+
+  const to = req.query.to || new Date().toISOString();
+  const from = req.query.from ||
+    new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(); // oletuksena 1 vuosi
+
+  const headers = new Headers();
+  headers.append('User-Agent', process.env.KUBIOS_USER_AGENT);
+  headers.append('Authorization', kubiosIdToken);
+  headers.append('x-api-key', process.env.KUBIOS_API_KEY);
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/measure/self/session?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
+      {method: 'GET', headers}
+    );
+    if (!response.ok) throw new Error(`Kubios API error: ${response.status}`);
+
+    const data = await response.json();
+    return res.json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {getUserData, getAnalysisHistory, getUserInfo, getMeasures};
