@@ -1,0 +1,40 @@
+C:\Metropolia_projektit\HYTE-kevat-26\Ryhmä_5\Backend\Apneapp_BE
+├── db
+|  ├── apneapp-db.sql
+|  └── create-user-sample.sql
+├── eslint.config.js
+├── package-lock.json
+├── package.json
+├── public
+|  ├── index.html
+|  └── style.css
+├── README.md
+├── src
+|  ├── controllers
+|  |  ├── entry-controller.js
+|  |  ├── kubios-auth-controller.js
+|  |  ├── kubios-controller.js
+|  |  └── user-controller.js
+|  ├── index.js
+|  ├── middlewares
+|  |  ├── authentication.js
+|  |  ├── error-handlers.js
+|  |  └── logger.js
+|  ├── models
+|  |  ├── bloodpressure-model.js
+|  |  ├── entry-model.js
+|  |  ├── hrv-model.js
+|  |  └── user-model.js
+|  ├── routes
+|  |  ├── entry-router.js
+|  |  ├── kubios-router.js
+|  |  └── user-router.js
+|  └── utils
+|     └── database.js
+├── test
+|  └── test-requests.http
+└── tree.txt
+
+directory: 471 file: 3750
+
+ignored: directory (5)
