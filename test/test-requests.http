@@ -152,6 +152,17 @@ Content-Type: application/json
 DELETE {{apiurl}}/bloodpressure/18
 Authorization: Bearer {{token}}
 
+##############################
+### Sleep mock data endpoints
+
+### Hae unitunnit (30 mittausta, 6-9h)
+GET {{apiurl}}/sleep/hours
+Authorization: Bearer {{token}}
+
+### Hae unen laatu (30 mittausta, 1.0-2.0)
+GET {{apiurl}}/sleep/quality
+Authorization: Bearer {{token}}
+
 ### Kubios login
 POST http://localhost:3000/api/kubios/login
 Content-Type: application/json
