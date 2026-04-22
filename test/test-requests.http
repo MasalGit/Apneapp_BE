@@ -7,157 +7,24 @@
 ##############################
 ### users endpoints
 
-### Get all users (with token)
-GET {{apiurl}}/users
-Authorization: Bearer {{token}}
 
-### Get all users (FAIL without token)
-GET {{apiurl}}/users
-
-### Register new user
-POST {{apiurl}}/users
-Content-Type: application/json
-
-{
-  "username": "donald555",
-  "password": "du12345677ck",
-  "email": "donald555@example.com"
-}
-
-### Register new user FAIL (email missing)
-POST {{apiurl}}/users
-Content-Type: application/json
-
-{
-  "username": "donald",
-  "password": "duck"
-}
-
-### User login
-POST {{apiurl}}/users/login
-Content-Type: application/json
-
-{
-  "username": "donald555",
-  "password": "du12345677ck"
-}
 
 ### Get user info by token
 GET {{apiurl}}/users/me
 Authorization: Bearer {{token}}
 
 ### Hae käyttäjä ID:llä
-GET {{apiurl}}/users/9
+GET {{apiurl}}/users/1
 Authorization: Bearer {{token}}
 
-### Päivitä käyttäjän tiedot
-PUT {{apiurl}}/users/7
-Content-Type: application/json
-Authorization: Bearer {{token}}
 
-{
-  "username": "donald3",
-  "email": "donald3@example.com"
-}
-
-### Poista käyttäjä
-DELETE {{apiurl}}/users/9
-Authorization: Bearer {{token}}
-
-##############################
-### Diary entry endpoints
-
-### Get all entries (by user id in token)
-GET {{apiurl}}/entries
-Authorization: Bearer {{token}}
-
-### Get entry by id
-GET {{apiurl}}/entries/10
-Authorization: Bearer {{token}}
-
-### Delete entry by id
-DELETE {{apiurl}}/entries/6
-Authorization: Bearer {{token}}
-
-### Post new entry
-POST {{apiurl}}/entries
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "entry_date": "2026-02-04",
-  "mood": "really happy",
-  "weight": 66,
-  "sleep_hours": 5,
-  "notes": "normipäivä"
-}
-
-### Modify entry by id
-PUT {{apiurl}}/entries/10
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "entry_date": "2026-02-04",
-  "mood": "tired",
-  "weight": 67,
-  "sleep_hours": 6,
-  "notes": "päivitetty merkintä"
-}
-
-##############################
-### Blood Pressure endpoints
-
-### Hae kaikki verenpaineet
-GET {{apiurl}}/bloodpressure
-Authorization: Bearer {{token}}
-
-### Hae mittaukset tietyltä päivältä
-GET {{apiurl}}/bloodpressure?date=2026-03-07
-Authorization: Bearer {{token}}
-
-### Hae mittaukset aikaväliltä
-GET {{apiurl}}/bloodpressure?from=2026-03-01&to=2026-03-05
-Authorization: Bearer {{token}}
-
-### Hae yksittäinen mittaus ID:llä
-GET {{apiurl}}/bloodpressure/1
-Authorization: Bearer {{token}}
-
-### Lisää uusi mittaus (POST)
-POST {{apiurl}}/bloodpressure
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "systolic": 135,
-  "diastolic": 88,
-  "pulse": 22,
-  "notes": "Testi HTTP-tiedostosta"
-}
-
-### Päivitä mittaus (PUT) - muuta ID (esim. 6) vastaamaan kantaasi
-PUT {{apiurl}}/bloodpressure/18
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "systolic": 110,
-  "diastolic": 70,
-  "pulse": 65,
-  "notes": "Päivitetty arvo"
-}
-
-### Poista mittaus (DELETE) - muuta ID vastaamaan kantaasi
-DELETE {{apiurl}}/bloodpressure/18
-Authorization: Bearer {{token}}
 
 ##############################
 ### Sleep mock data endpoints
 
 ### Hae unitunnit (30 mittausta, 6-9h)
 GET {{apiurl}}/sleep/hours
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImt1Ymlvc0lkVG9rZW4iOiJleUpyYVdRaU9pSlFWRVJSVUdaTGJqVTJiWEI1UlU5cGNIVnhPR1JGVURCUGVYbEpNV2gxV2xRd01WSlZla2RYVVN0UlBTSXNJbUZzWnlJNklsSlRNalUySW4wLmV5SmhkRjlvWVhOb0lqb2lRa2M1TjNaM1lsQlNTMWt4Y20xNFZVUk5kWGx4VVNJc0luTjFZaUk2SWpSall6TXhaREZrTFRReFpHSXROR1ExWkMwNE4yTTBMV1ZpTlRVMU1UazJOREJsWVNJc0ltVnRZV2xzWDNabGNtbG1hV1ZrSWpwMGNuVmxMQ0pwYzNNaU9pSm9kSFJ3Y3pwY0wxd3ZZMjluYm1sMGJ5MXBaSEF1WlhVdGQyVnpkQzB4TG1GdFlYcHZibUYzY3k1amIyMWNMMlYxTFhkbGMzUXRNVjkxVVcxQlp6UTFlSGtpTENKamIyZHVhWFJ2T25WelpYSnVZVzFsSWpvaU5HTmpNekZrTVdRdE5ERmtZaTAwWkRWa0xUZzNZelF0WldJMU5UVXhPVFkwTUdWaElpd2laMmwyWlc1ZmJtRnRaU0k2SWtWc2Mya2lMQ0poZFdRaU9pSXljamd6T0dWdmFXUXhkbVZpTUhGdWNXZHVPREZ4WVhWdE1DSXNJbVYyWlc1MFgybGtJam9pWmpSbFpHRTBNMkl0T1RWa1pTMDBaRFl6TFdGbE9URXRObUUyTTJNd01qQTBaREEzSWl3aWRHOXJaVzVmZFhObElqb2lhV1FpTENKaGRYUm9YM1JwYldVaU9qRTNOelk0TkRrM09UQXNJbVY0Y0NJNk1UYzNOamcxTXpNNU1Dd2lhV0YwSWpveE56YzJPRFE1Tnprd0xDSm1ZVzFwYkhsZmJtRnRaU0k2SWt0MVltbHZjeUlzSW1wMGFTSTZJamhqT0RNeE1qSmtMV00xWmpRdE5EZGpZeTA0TmpWaExUZzJPRGM1WldZek1qVXlaU0lzSW1WdFlXbHNJam9pWld4emFXdDFZbWx2YzBCbmJXRnBiQzVqYjIwaWZRLmE1REw1ZXdfY3JVZFFZNFEtYUlvUmNucTBDQ0JoX2lsekRpakNUajh0MEFyT24temNrcElCZGhVX2J6VnNVR09pbFRxd2E2bV9WRXFSMDRWamhzRFFFUnc3T2VFWHdoTXJtZV9xUEU5SDNIWFpFRnhCaW9ZYi1nVU9Oa1B4eXVTUkJiZEVyMnN6WVlCQUlwejFaZEEyMDNITlVWS1VhUzBIVzk1SHZ2MGc5bk0xU0RHNnhiYU03Q3l5QTVIX1h6LUdpOWF2T3VGUjBYVFRjTmxkSUZqZzVfaGVkblhNcXlJNF93LU84OHVQVlFURUlmZ1R5SUJjNmJLaEJWWTgtNkpIaWlWQjRJcTRFRVZpQjV1Y1A3UGhmS09Ha3lGTVA3T29uMy1MRlRaakcxb0VkV0N3Z19qVWdMR1EzZjJMYlRwVWRndUtwNmNacm1hYlM1bVhFVEFUdyIsImlhdCI6MTc3Njg0OTc5MSwiZXhwIjoxNzc2OTM2MTkxfQ.fPsvBcyj56YleFP8RpRplM3vRK4oYBnLE6lbWAbGUYU
 
 ### Hae unen laatu (30 mittausta, 1.0-2.0)
 GET {{apiurl}}/sleep/quality
@@ -173,7 +40,7 @@ Content-Type: application/json
 }
 ### Hae HRV-tulokset
 GET http://localhost:3000/api/kubios/results?from=2026-03-01T00:00:00%2B00:00
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImt1Ymlvc0lkVG9rZW4iOiJleUpyYVdRaU9pSlFWRVJSVUdaTGJqVTJiWEI1UlU5cGNIVnhPR1JGVURCUGVYbEpNV2gxV2xRd01WSlZla2RYVVN0UlBTSXNJbUZzWnlJNklsSlRNalUySW4wLmV5SmhkRjlvWVhOb0lqb2lTeloyVDJSWGVHVnFNSFY2VkMxbVF6TlBOekJCZHlJc0luTjFZaUk2SWpSall6TXhaREZrTFRReFpHSXROR1ExWkMwNE4yTTBMV1ZpTlRVMU1UazJOREJsWVNJc0ltVnRZV2xzWDNabGNtbG1hV1ZrSWpwMGNuVmxMQ0pwYzNNaU9pSm9kSFJ3Y3pwY0wxd3ZZMjluYm1sMGJ5MXBaSEF1WlhVdGQyVnpkQzB4TG1GdFlYcHZibUYzY3k1amIyMWNMMlYxTFhkbGMzUXRNVjkxVVcxQlp6UTFlSGtpTENKamIyZHVhWFJ2T25WelpYSnVZVzFsSWpvaU5HTmpNekZrTVdRdE5ERmtZaTAwWkRWa0xUZzNZelF0WldJMU5UVXhPVFkwTUdWaElpd2laMmwyWlc1ZmJtRnRaU0k2SWtWc2Mya2lMQ0poZFdRaU9pSXljamd6T0dWdmFXUXhkbVZpTUhGdWNXZHVPREZ4WVhWdE1DSXNJbVYyWlc1MFgybGtJam9pWlRKa01XRmpZakF0WW1RM1pTMDBaV0kxTFdJeE16Y3RObVkwWVRjd09ETmxNV1ZpSWl3aWRHOXJaVzVmZFhObElqb2lhV1FpTENKaGRYUm9YM1JwYldVaU9qRTNOell3TWprNU5ETXNJbVY0Y0NJNk1UYzNOakF6TXpVME15d2lhV0YwSWpveE56YzJNREk1T1RRekxDSm1ZVzFwYkhsZmJtRnRaU0k2SWt0MVltbHZjeUlzSW1wMGFTSTZJakUzWkdNeFpEa3lMVGt6TW1RdE5EQmlPUzA0TjJFeExURXhNbUUwT1RSaU1ETTNZeUlzSW1WdFlXbHNJam9pWld4emFXdDFZbWx2YzBCbmJXRnBiQzVqYjIwaWZRLlduMGVXbW5yQl80ZE9xRmdIRW1ybHM2eW5Pek1MVjdFRTFheWZMLVZmVms1cFc0dnJSTkR1a1dFemJPWHZoNUdCU2cyYWZ5QXV5QkczajRvajNBQzNSelF2dGU5M0tPRDU0bE55bkJrU1l0X3lHQk5oY3JSOGR6V0ZBOTlTOFloUnVKdFdTTUpneTl1NXUzSGExRU02alV4VEg5UExxN2Ixd2pKbURsUjJzdVJ0bmpQaFJDZDIxWGZQNVcxci15RlZuM3B2UmFKemwwNWJ1MWJONzJFek82NW9PZUtfRW9WaHBkVF8zMEE0RGd0MHBfU21DY1VubFlaQV9VWE8wUkRQdVhnVmkyTHZ2Vm55UkVmTWM2QkJnTXVFYVUyc3VHTE5hbUZ5cElIU3NRNWRZR0tqQU5wcUhLbW54dEJnR2VGQ2JOclM0QzlnemQxMVZXY3pRcEY4USIsImlhdCI6MTc3NjAyOTk0NCwiZXhwIjoxNzc2MTE2MzQ0fQ.K7odaOfh9MvKbKgSpynBOc76BQN7I9joVnCqSJC0Zh0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImt1Ymlvc0lkVG9rZW4iOiJleUpyYVdRaU9pSlFWRVJSVUdaTGJqVTJiWEI1UlU5cGNIVnhPR1JGVURCUGVYbEpNV2gxV2xRd01WSlZla2RYVVN0UlBTSXNJbUZzWnlJNklsSlRNalUySW4wLmV5SmhkRjlvWVhOb0lqb2lRMGxsYzB0UFRGVlZWbGhXUzFobGVYZ3lRek50ZHlJc0luTjFZaUk2SWpSall6TXhaREZrTFRReFpHSXROR1ExWkMwNE4yTTBMV1ZpTlRVMU1UazJOREJsWVNJc0ltVnRZV2xzWDNabGNtbG1hV1ZrSWpwMGNuVmxMQ0pwYzNNaU9pSm9kSFJ3Y3pwY0wxd3ZZMjluYm1sMGJ5MXBaSEF1WlhVdGQyVnpkQzB4TG1GdFlYcHZibUYzY3k1amIyMWNMMlYxTFhkbGMzUXRNVjkxVVcxQlp6UTFlSGtpTENKamIyZHVhWFJ2T25WelpYSnVZVzFsSWpvaU5HTmpNekZrTVdRdE5ERmtZaTAwWkRWa0xUZzNZelF0WldJMU5UVXhPVFkwTUdWaElpd2laMmwyWlc1ZmJtRnRaU0k2SWtWc2Mya2lMQ0poZFdRaU9pSXljamd6T0dWdmFXUXhkbVZpTUhGdWNXZHVPREZ4WVhWdE1DSXNJbVYyWlc1MFgybGtJam9pTnpoa09EUXdZV1F0TjJGaU5DMDBNalEzTFRsaU9EZ3RZV1ptTTJVek56RTBaakkySWl3aWRHOXJaVzVmZFhObElqb2lhV1FpTENKaGRYUm9YM1JwYldVaU9qRTNOelkyTnpVeE1EWXNJbVY0Y0NJNk1UYzNOalkzT0Rjd05pd2lhV0YwSWpveE56YzJOamMxTVRBMkxDSm1ZVzFwYkhsZmJtRnRaU0k2SWt0MVltbHZjeUlzSW1wMGFTSTZJbVUzTVRJMVpERTRMV1l5WmpVdE5HRTNNQzFpTm1JeExUazFNV1V3TkRKbE5HWTRaU0lzSW1WdFlXbHNJam9pWld4emFXdDFZbWx2YzBCbmJXRnBiQzVqYjIwaWZRLlg3SDI0akZHc054VXJHZWpkLUY4ODhoYVR4djdSRFcwR3EtWFJUaTBZYk9VenB5YVdHeFpyVEtRdlhNUkV6RFhqWWF5Y1Y5anNmR3h5TTBuczlvTXhORXYxMV9KMkR4QlZ3MEtTc0tlaXF2WUtmNUd5bVVzeU04bmdSX1ZlOWJJTEhJdUdaQnVaOUl2ZFp6QTJkeno5WjlPYThSUXN4STZkdWIxa3ZFeWNzcjc1VW5QXzV4WGFQRmFDUmtRR2VHcXdGWndYem9vX0NjckRRYnNkOFJuamp2V1dqWExXb2N6V2NqSVFQS2gzWEk2TTBIUlV5NkJicGZfVnN1ZXJwWGRTc0xhdXFiVTM4Rk5EOUp3cWhQTDBCTVN4VkdocHJSei1tRjRIOG5pc0Z1Y21TR2N3dG9uT2JvallSVktyQ2x3ZmRnOHJqOVk1ZnczN1pQVUwwUzFIUSIsImlhdCI6MTc3NjY3NTEwNiwiZXhwIjoxNzc2NzYxNTA2fQ.cb2CpFGObFT6YQ5vkxO_ysDil7tcbzi4a_7CFRzBf4M
 
 ### Hae analyysihistoria
 GET http://localhost:3000/api/kubios/history
