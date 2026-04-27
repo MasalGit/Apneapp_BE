@@ -1,13 +1,5 @@
 import promisePool from '../utils/database.js';
 
-// TODO: lisää modelit ja muokkaa kontrollerit reiteille:  - tehty, minä ja Calude
-// GET /api/users - listaa kaikki käyttäjät
-const listAllUsers = async () => {
-  const sql = 'SELECT username, created_at FROM Users';
-  const [rows] = await promisePool.query(sql);
-  return rows;
-};
-
 // POST /api/users   lisää uusi käyttäjä
 const addUser = async (user) => {
   const {username, password, email} = user;
@@ -71,19 +63,4 @@ const selectUserByEmail = async (email) => {
   }
 };
 
-// lisätty virheenkäsittely minä ja Claude
-const findUserByUsername = async (username) => {
-  try {
-    const sql = 'SELECT * FROM Users WHERE username = ?';
-    const [rows] = await promisePool.execute(sql, [username]);
-    return rows[0];
-  } catch (e) {
-    console.error('error', e.message);
-    return {error: e.message};
-  }
-};
-
-
-const selectUserById = findUserById;
-
-export {findUserByUsername, addUser, listAllUsers, findUserById, selectUserById, selectUserByEmail, updateUser, removeUser };
+export {addUser, findUserById, selectUserByEmail, updateUser, removeUser};

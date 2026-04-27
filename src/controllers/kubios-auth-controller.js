@@ -20,7 +20,7 @@
  import {
    addUser,
    selectUserByEmail,
-   selectUserById,
+   findUserById,
  } from '../models/user-model.js';
 
  // Kubios API base URL should be set in .env
@@ -172,7 +172,7 @@
  * @return {object} user info
  */
  const getMe = async (req, res) => {
-   const user = await selectUserById(req.user.userId);
+   const user = await findUserById(req.user.userId);
    res.json({user, kubios_token: req.user.kubiosIdToken});
  };
 
