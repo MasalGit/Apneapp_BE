@@ -24,3 +24,16 @@ CREATE TABLE HrvResults (
   created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
+
+CREATE TABLE IF NOT EXISTS Measurements (
+  measure_id  VARCHAR(100) PRIMARY KEY,
+  user_id     INT NOT NULL,
+  measured_at DATETIME NOT NULL,
+  duration_s  FLOAT,
+  lfhf_avg    FLOAT,
+  risk        VARCHAR(20),
+  timeseries  JSON,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id),
+  INDEX idx_user_measured (user_id, measured_at)
+);
