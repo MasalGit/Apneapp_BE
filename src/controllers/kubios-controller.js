@@ -140,7 +140,7 @@ const getMeasures = async (req, res, next) => {
 
   try {
     const response = await fetch(
-      `${baseUrl}/measure/self/session?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
+      `${baseUrl}/measure/self/session?details=yes&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
       {method: 'GET', headers}
     );
     if (!response.ok) throw new Error(`Kubios API error: ${response.status}`);
