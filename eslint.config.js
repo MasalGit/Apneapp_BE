@@ -4,7 +4,7 @@ import js from '@eslint/js';
 export default [
   {
     languageOptions: {
-      ecmaVersion: 2021,
+      ecmaVersion: 2022,
       sourceType: 'module',
       globals: {...globals.node},
     },

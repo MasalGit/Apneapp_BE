@@ -1,6 +1,6 @@
 // test/test-rri-parse.js
 import fetch from 'node-fetch';
-import 'dotenv/config';+
+import 'dotenv/config';
 
 const BASE_URL = 'http://localhost:3000';
 const USERNAME = process.env.KUBIOS_USERNAME;
