@@ -76,7 +76,7 @@ const syncMeasurements = async (req, res, next) => {
 
       const duration_s = rriValues.reduce((a, b) => a + b, 0) / 1000;
       console.log('Mittaus:', measure.measure_id, 'kesto:', duration_s); // testausta
-      if (duration_s < 300) { skippedCount++; continue; }
+      if (duration_s < 10800) { skippedCount++; continue; }
 
       const { timeseries, lfhf_avg } = await analyzeRRI(rriValues);
 
