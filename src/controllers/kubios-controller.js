@@ -39,7 +39,7 @@ const syncMeasurements = async (req, res, next) => {
 
   try {
     const response = await fetch(
-      `${baseUrl}/measure/self/session?details=yes&from=2020-01-01T00:00:00.000Z`,
+      `${baseUrl}/measure/self/session?details=yes&from=2026-01-01T00:00:00.000Z`,
       { method: 'GET', headers }
     );
     const data = await response.json();
