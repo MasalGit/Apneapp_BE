@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
-import entryRouter from './routes/entry-router.js';
 import kubiosRouter from './routes/kubios-router.js';
 import sleepRouter from './routes/sleep-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
@@ -22,9 +21,6 @@ app.use(requestLogger);
 
 // Users resource router for all /api/users routes
 app.use('/api/users', userRouter);
-// Diary entries resource router 
-app.use('/api/entries', entryRouter);
-
 // Kubios Cloud API integration and apnea analysis
 app.use('/api/kubios', kubiosRouter);
 
