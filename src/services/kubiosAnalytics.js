@@ -52,11 +52,14 @@ const analyzeRRI = async (rriValues) => {
     throw new Error(`Analytics analyze failed: ${response.status}`);
   }
 
-  const data = await response.json();
-  const { tt, lf_hf_power, sns_index, pns_index } = data;
+  const text = await response.text();
+  const data = JSON.parse(text.replace(/\bNaN\b/g, 'null'));
+  const { tt, lf_hf_power, sns_index, pns_index } = data.analysis;
 
-  const avg = (arr) =>
-    parseFloat((arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(3));
+  const avg = (arr) => {
+    const valid = arr.filter(v => v !== null);
+    return parseFloat((valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(3));
+  };
 
   const timeseries = { tt, lf_hf_power, sns_index, pns_index };
   const lfhf_avg = avg(lf_hf_power);

@@ -37,6 +37,19 @@ const listMeasurementsByUserId = async (user_id) => {
   }
 };
 
+const getMeasurementById = async (measure_id, user_id) => {
+  try {
+    const sql = `SELECT measure_id, measured_at, duration_s, lfhf_avg, risk, timeseries
+                 FROM Measurements
+                 WHERE measure_id = ? AND user_id = ?`;
+    const [rows] = await promisePool.execute(sql, [measure_id, user_id]);
+    return rows[0];
+  } catch (e) {
+    console.error('getMeasurementById error', e.message);
+    return { error: e.message };
+  }
+};
+
 const getSavedMeasureIds = async (user_id) => {
   try {
     const sql = 'SELECT measure_id FROM Measurements WHERE user_id = ?';
@@ -48,4 +61,4 @@ const getSavedMeasureIds = async (user_id) => {
   }
 };
 
-export { addMeasurement, listMeasurementsByUserId, getSavedMeasureIds };
+export { addMeasurement, listMeasurementsByUserId, getMeasurementById, getSavedMeasureIds };

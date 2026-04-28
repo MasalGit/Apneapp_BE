@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
-import {addMeasurement, listMeasurementsByUserId} from '../models/measurement-model.js';
+import {addMeasurement, listMeasurementsByUserId, getMeasurementById} from '../models/measurement-model.js';
+import {analyzeRRI} from '../services/kubiosAnalytics.js';
 
 const baseUrl = process.env.KUBIOS_API_URI;
 
@@ -75,25 +76,14 @@ const syncMeasurements = async (req, res, next) => {
 
       const duration_s = rriValues.reduce((a, b) => a + b, 0) / 1000;
       console.log('Mittaus:', measure.measure_id, 'kesto:', duration_s); // testausta
-      if (duration_s < 60) { skippedCount++; continue; }
+      if (duration_s < 300) { skippedCount++; continue; }
 
-      let sum = 0;
-      for (let i = 1; i < rriValues.length; i++) {
-        const diff = rriValues[i] - rriValues[i - 1];
-        sum += diff * diff;
-      }
-      const rmssd = Math.sqrt(sum / (rriValues.length - 1));
-      const lfhf_avg = parseFloat((100 / rmssd).toFixed(3));
+      const { timeseries, lfhf_avg } = await analyzeRRI(rriValues);
 
       let risk;
       if (lfhf_avg < 0.7)      risk = 'normal';
       else if (lfhf_avg < 1.2) risk = 'elevated';
       else                     risk = 'high';
-
-      const timeseries = rriValues.map((rri, i) => ({
-        t: Math.round(rriValues.slice(0, i).reduce((a, b) => a + b, 0) / 1000),
-        lfhf: lfhf_avg
-      }));
 
       const measured_at = new Date(measure.measured_timestamp)
         .toISOString().slice(0, 19).replace('T', ' ');
@@ -149,4 +139,14 @@ const getMeasures = async (req, res, next) => {
   }
 };
 
-export {getAnalysisHistory, getUserInfo, syncMeasurements, getMeasures};
+const getMeasurement = async (req, res, next) => {
+  try {
+    const measurement = await getMeasurementById(req.params.id, req.user.userId);
+    if (!measurement) return res.status(404).json({message: 'Measurement not found'});
+    return res.json(measurement);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {getAnalysisHistory, getUserInfo, syncMeasurements, getMeasures, getMeasurement};
