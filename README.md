@@ -1,6 +1,6 @@
-# Terveyspäiväkirja — Health Diary Web App
+# Uniapnea riskin tunnistus sovellus — ApneApp Web App
 
-Yksilöprojekti | Web-sovelluskehitys TX00EY11-3003
+Ryhmätyö Projekti: Terveyssovelluksen kehitys TX00EY13-3003
 
 Terveyspäiväkirja on full stack -web-sovellus, jossa käyttäjä voi seurata terveyttään kirjaamalla päiväkirjamerkintöjä, verenpainemittauksia sekä laskemalla BMI-arvonsa. Sovellus on toteutettu Node.js/Express-backendillä ja Vite-pohjaisella HTML/CSS/JS-frontendillä.
 
@@ -9,9 +9,6 @@ Terveyspäiväkirja on full stack -web-sovellus, jossa käyttäjä voi seurata t
 ## Ominaisuudet
 
 - **Rekisteröityminen ja kirjautuminen** — JWT-pohjainen autentikaatio
-- **Päiväkirja** — merkintöjen lisäys, muokkaus, poisto ja selaus korttinäkymässä
-- **Verenpaine** — mittaustulosten CRUD ja päivämääräsuodatus
-- **BMI-laskuri** — perinteinen kaava sekä Trefethenin korjattu kaava automaattisella tulkinnalla
 - **Tietoturva** — käyttäjä näkee ja muokkaa vain omia tietojaan
 - **Responsiivinen ulkoasu** — mobiili- ja työpöytänäkymä, omat grafiikat ja taustat
 
@@ -26,23 +23,6 @@ Users
   email      VARCHAR(100) NOT NULL UNIQUE,
   password   VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-
-HrvResults 
-  hrv_id       INT AUTO_INCREMENT PRIMARY KEY,
-  user_id      INT NOT NULL,
-  measured_at  DATETIME NOT NULL,
-  mean_rr_ms   FLOAT,
-  rmssd_ms     FLOAT,
-  sdnn_ms      FLOAT,
-  pns_index    FLOAT,
-  sns_index    FLOAT,
-  stress_index FLOAT,
-  readiness    FLOAT,
-  lf_hf_ratio  FLOAT,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id)
-
 
 Measurements 
   measure_id  VARCHAR(100) PRIMARY KEY,
@@ -97,17 +77,6 @@ Measurements
 POST   /api/users/login             Kirjautuminen, palauttaa JWT-tokenin
 POST   /api/users                   Rekisteröityminen
 
-GET    /api/entries                 Omat päiväkirjamerkinnät
-POST   /api/entries                 Uusi merkintä
-GET    /api/entries/:id             Yksittäinen merkintä
-PUT    /api/entries/:id             Päivitä merkintä
-DELETE /api/entries/:id             Poista merkintä
-
-GET    /api/bloodpressure           Verenpainemittaukset (+ päivämääräsuodatus)
-POST   /api/bloodpressure           Uusi mittaus
-GET    /api/bloodpressure/:id       Yksittäinen mittaus
-PUT    /api/bloodpressure/:id       Päivitä mittaus
-DELETE /api/bloodpressure/:id       Poista mittaus
 ```
 
 Kaikki suojatut reitit vaativat otsikossa: `Authorization: Bearer <token>`
@@ -168,7 +137,7 @@ cd BE && npm run dev
 
 ### AI:n hyödyntäminen
 
-Projektissa on hyödynnetty tekoälyä (Claude, Anthropic ja ChatGPT) seuraavissa kohdissa:
+Projektissa on hyödynnetty tekoälyä (Claude Anthropic ja ChatGPT) seuraavissa kohdissa:
 
 - Backend-rakenne ja MVC-arkkitehtuurin suunnittelu
 - Express-validator-validointisääntöjen kirjoittaminen

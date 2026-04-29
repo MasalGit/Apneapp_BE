@@ -5,7 +5,6 @@ import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import measurementsRouter from './routes/measurements.js';
 import kubiosRouter from './routes/kubios-router.js';
-import sleepRouter from './routes/sleep-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
 
 const hostname = '127.0.0.1';
@@ -24,9 +23,6 @@ app.use(requestLogger);
 app.use('/api/users', userRouter);
 // Kubios Cloud API integration and apnea analysis
 app.use('/api/kubios', kubiosRouter);
-
-// Sleep mock data for frontend
-app.use('/api/sleep', sleepRouter);
 
 // API root
 app.get('/api', (req, res) => {
