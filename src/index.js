@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
+import measurementsRouter from './routes/measurements.js';
 import kubiosRouter from './routes/kubios-router.js';
 import sleepRouter from './routes/sleep-router.js';
 import { notFoundHandler, errorHandler } from './middlewares/error-handlers.js';
@@ -31,6 +32,8 @@ app.use('/api/sleep', sleepRouter);
 app.get('/api', (req, res) => {
   res.send('ApneApp');
 });
+
+app.use('/api/measurements', measurementsRouter);
 
 
 // tarjoillaan webbisivusto (front-end) palvelimen juuressa
