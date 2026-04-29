@@ -8,7 +8,7 @@ router.get('/', authenticateToken, async (req, res) => {
   try {
     const user_id = req.user.userId;
 
-    const days = Math.min(parseInt(req.query.days) || 7, 90);
+    const days = Math.min(parseInt(req.query.days) || 7, 365);
 
     const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
