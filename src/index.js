@@ -38,6 +38,8 @@ app.use('/', express.static('public'));
 // Jos pyyntö ei täsmää yhteenkään reittiin yllä, tämä käsittelee sen
 app.use(notFoundHandler);
 
+app.use('/api/measurements', measurementsRouter);
+
 // Kaikki next(error)-kutsut ohjautuvat tänne
 app.use(errorHandler);
 
