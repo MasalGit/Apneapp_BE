@@ -54,14 +54,15 @@ const analyzeRRI = async (rriValues) => {
 
   const text = await response.text();
   const data = JSON.parse(text.replace(/\bNaN\b/g, 'null'));
-  const { tt, lf_hf_power, sns_index, pns_index } = data.analysis;
+  console.log('Analytics keys:', Object.keys(data.analysis));
+  const { tt, lf_hf_power, sns_index, pns_index, rmssd, mean_hr, stress_index } = data.analysis;
 
   const avg = (arr) => {
     const valid = arr.filter(v => v !== null);
     return parseFloat((valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(3));
   };
 
-  const timeseries = { tt, lf_hf_power, sns_index, pns_index };
+  const timeseries = { tt, lf_hf_power, sns_index, pns_index, rmssd, mean_hr, stress_index };
   const lfhf_avg = avg(lf_hf_power);
 
   return { timeseries, lfhf_avg };
