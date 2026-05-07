@@ -59,5 +59,7 @@ for (const measure of measures) {
   const result = await analyzeRRI(rriValues);
 
   console.log('lfhf_avg:', result.lfhf_avg);
+  console.log('risk:', result.risk);
   console.log('timeseries pisteitä:', result.timeseries.tt.length);
+  console.log('kentät:', Object.keys(result.timeseries).filter(k => result.timeseries[k] !== null && result.timeseries[k] !== undefined));
 }
