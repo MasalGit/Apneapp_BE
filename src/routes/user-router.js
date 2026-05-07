@@ -6,7 +6,45 @@ import {validationErrorHandler} from '../middlewares/error-handlers.js';
 
 const userRouter = express.Router();
 
-// käyttäjän haku, muokkaus ja poisto ID:n perusteella
+/**
+ * @api {get} /users/:id Hae käyttäjä ID:llä
+ * @apiName GetUser
+ * @apiGroup Users
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiParam {Number} id Käyttäjän ID
+ *
+ * @apiSuccess {Number} user_id Käyttäjän ID
+ * @apiSuccess {String} username Käyttäjätunnus
+ * @apiSuccess {String} email Sähköpostiosoite
+ * @apiSuccess {String} created_at Luontiaika
+ */
+
+/**
+ * @api {put} /users/:id Päivitä käyttäjän tiedot
+ * @apiName PutUser
+ * @apiGroup Users
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiParam {Number} id Käyttäjän ID
+ *
+ * @apiBody {String} [username] Uusi käyttäjätunnus (3-20 merkkiä, vain kirjaimet ja numerot)
+ * @apiBody {String} [email] Uusi sähköpostiosoite
+ * @apiBody {String} [password] Uusi salasana
+ *
+ * @apiSuccess {String} message Tilaviesti
+ */
+
+/**
+ * @api {delete} /users/:id Poista käyttäjä
+ * @apiName DeleteUser
+ * @apiGroup Users
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiParam {Number} id Käyttäjän ID
+ *
+ * @apiSuccess {String} message Tilaviesti
+ */
 userRouter.route('/:id')
   .get(authenticateToken, getUserById)
   .put(

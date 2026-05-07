@@ -4,7 +4,19 @@ import db from '../utils/database.js';
 
 const router = express.Router();
 
-
+/**
+ * @api {get} /measurements Mittausdata päivittäin ryhmiteltynä
+ * @apiName GetMeasurements
+ * @apiGroup Measurements
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiQuery {Number} [days=7] Palautettavien päivien määrä (max 365)
+ *
+ * @apiSuccess {Object[]} data Päivittäinen mittausdata
+ * @apiSuccess {String} data.date Päivämäärä (YYYY-MM-DD)
+ * @apiSuccess {Number} data.hours Unen kesto tunteina
+ * @apiSuccess {Number} data.lfhf LF/HF-suhteen keskiarvo
+ */
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const user_id = req.user.userId;
@@ -56,6 +68,19 @@ router.get('/', authenticateToken, async (req, res) => {
 
 
 
+/**
+ * @api {get} /measurements/report Uniapnearaportti
+ * @apiName GetReport
+ * @apiGroup Measurements
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiQuery {Number} [days=7] Raportin aikaväli päivissä (max 90)
+ *
+ * @apiSuccess {Number} avgSleep Keskimääräinen unen kesto (h)
+ * @apiSuccess {Number} avgLFHF Keskimääräinen LF/HF-suhde
+ * @apiSuccess {Number} elevatedRatio Kohonneen riskin mittausten osuus (0-1)
+ * @apiSuccess {Number} totalMeasurements Mittausten kokonaismäärä
+ */
 router.get('/report', authenticateToken, async (req, res) => {
   try {
     const user_id = req.user.userId;

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Read(//c/Users/henri/.claude/projects/c--Metropolia-projektit-HYTE-kevat-26-Ryhm--5-Backend-Apneapp-BE/memory/**)"
+    ]
+  }
+}
