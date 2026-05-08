@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import measurementsRouter from './routes/measurements.js';
@@ -32,13 +35,14 @@ app.get('/api', (req, res) => {
 app.use('/api/measurements', measurementsRouter);
 
 
+// API-dokumentaatio
+app.use('/docs', express.static(join(__dirname, '../docs')));
+
 // tarjoillaan webbisivusto (front-end) palvelimen juuressa
 app.use('/', express.static('public'));
 
 // Jos pyyntö ei täsmää yhteenkään reittiin yllä, tämä käsittelee sen
 app.use(notFoundHandler);
-
-app.use('/api/measurements', measurementsRouter);
 
 // Kaikki next(error)-kutsut ohjautuvat tänne
 app.use(errorHandler);

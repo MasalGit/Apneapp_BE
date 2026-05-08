@@ -6,7 +6,9 @@
       "Bash(node -e \"import\\('./src/utils/database.js'\\).then\\(m => m.default.query\\('SELECT user_id, username, email FROM Users WHERE email=\\\\\"elsikubios@gmail.com\\\\\"'\\).then\\(\\([r]\\)=>console.log\\(JSON.stringify\\(r\\)\\)\\).catch\\(e=>console.error\\(e\\)\\)\\)\")",
       "Bash(node -e \"import\\('./src/utils/database.js'\\).then\\(m => m.default.query\\('SELECT user_id, username, email, created_at FROM Users'\\).then\\(\\([r]\\)=>console.log\\(JSON.stringify\\(r\\)\\)\\).catch\\(e=>console.error\\(e\\)\\)\\)\")",
       "Bash(node -e ' *)",
-      "Bash(node src/index.js)"
+      "Bash(node src/index.js)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\henri\\OneDrive\\Työpöytä\\New folder\\Apneapp_FE\\Apneapp"

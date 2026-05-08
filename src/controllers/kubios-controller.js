@@ -78,12 +78,7 @@ const syncMeasurements = async (req, res, next) => {
       console.log('Mittaus:', measure.measure_id, 'kesto:', duration_s); // testausta
       if (duration_s < 10800) { skippedCount++; continue; }
 
-      const { timeseries, lfhf_avg } = await analyzeRRI(rriValues);
-
-      let risk;
-      if (lfhf_avg < 0.7)      risk = 'normal';
-      else if (lfhf_avg < 1.2) risk = 'elevated';
-      else                     risk = 'high';
+      const { timeseries, lfhf_avg, risk } = await analyzeRRI(rriValues);
 
       const measured_at = new Date(measure.measured_timestamp)
         .toISOString().slice(0, 19).replace('T', ' ');
