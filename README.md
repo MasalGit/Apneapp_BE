@@ -38,7 +38,7 @@ ApneApp on web-sovellus, joka tunnistaa uniapnean riskin yön yli -HRV-mittauste
 
 ## Rautalankamallit
 
-*(Ei saatavilla)*
+![Rautalankamalli](public/Kuvat0.1/Rautalankamalli.png)
 
 ---
 
