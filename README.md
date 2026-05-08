@@ -27,12 +27,12 @@ ApneApp on web-sovellus, joka tunnistaa uniapnean riskin yön yli -HRV-mittauste
 
 ## Kuvakaappaukset
 
-![Kirjautuminen](docs/screenshots/loging.png)
-![Dashboard](docs/screenshots/dashboard.png)
-![Graafit](docs/screenshots/graphs.png)
-![Raportit](docs/screenshots/raports.png)
-![Tiedot](docs/screenshots/info.png)
-![Asetukset](docs/screenshots/settings.png)
+![Kirjautuminen](public/Kuvat0.1/Kirjautuminen.png)
+![Dashboard](public/Kuvat0.1/Dashboard.png)
+![Graafit](public/Kuvat0.1/Kaavio.png)
+![Raportit](public/Kuvat0.1/Raportti.png)
+![Tiedot](public/Kuvat0.1/Tietoja.png)
+![Asetukset](public/Kuvat0.1/Settings.png)
 
 ---
 
